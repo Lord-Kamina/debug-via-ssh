@@ -95,13 +95,13 @@ runs:
     - name: Install and setup ngrok
       run: |
         echo "# Install ngrok"
-          curl https://bin.equinox.io/c/bNyj1mQVY4c/$(cat ngrok_zip_name) --output ngrok.zip
-          unzip ngrok.zip
-          chmod +x ./ngrok
-
-        echo "# Set ngrok with the given authentification token"
-          ./ngrok authtoken ${{ inputs.NGROK_AUTH_TOKEN }}
-      shell: bash
+        curl https://bin.equinox.io/c/bNyj1mQVY4c/$(cat ngrok_zip_name) --output ngrok.zip
+        unzip ngrok.zip
+        chmod +x ./ngrok
+        ./ngrok config add-authtoken ${{ inputs.NGROK_AUTH_TOKEN }} 2>&1
+        echo "## check config file ##"
+        ./ngrok config check
+      shell: bash -x {0}
 
     - name: Start ngrok
       run: |

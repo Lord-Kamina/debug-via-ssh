@@ -7,15 +7,26 @@ on:
       os:
         description: 'Leave only desired OS in the field'
         required: true
-        default: 'windows-2016 | windows-2019 | ubuntu-16.04 | ubuntu-18.04 | ubuntu-20.04 | macos-10.15 | macos-11.0'
+        default: 'windows-2022 | windows-latest | ubuntu-22.04 | ubuntu-24.04 | macos-12 | macos-13 | macos-latest'
+    secrets:
+      NGROK_AUTH_TOKEN:
+        description: 'Token for SSH debug'
+        required: false
+      SSH_PASS:
+        description: 'Pass for SSH debug'
+        required: false
 
 jobs:
   start_ssh_session:
     runs-on: ${{ github.event.inputs.os }}
     name: Start the SSH session
     steps:
+    - name: Checkout Action
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Start SSH session
-      uses: luchihoratiu/debug-via-ssh@main
+      uses: ./
       with:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
         SSH_PASS: ${{ secrets.SSH_PASS }}
