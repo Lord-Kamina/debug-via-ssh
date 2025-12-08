@@ -50,7 +50,7 @@ runs:
         {
           printf "# Preparing environment..."
             echo "ngrok-v3-stable-darwin-amd64.zip" > ngrok_zip_name
-            echo "root" > ssh_user
+            echo "" > ssh_user
           printf " [DONE]\n\n"
   
           echo "# Change the SSH user password"
@@ -119,8 +119,12 @@ runs:
           done
         printf " [DONE]\n\n"
 
-        ssh_string=$(grep -oE "tcp://(.+)" .ngrok.log | sed "s/tcp:\/\//ssh $(cat ssh_user)@/" | sed "s/:/ -p /")
-        continue_path=$(eval echo ~$(cat ssh_user)/continue)
+        ssh_string=$(grep -oE "tcp://(.+)" .ngrok.log | sed "s/tcp:\/\//ssh $(cat ssh_user)@/" | sed "s/:/ -p /")    
+        if [[ '${{ runner.os }}' == 'macOS' ]]; then
+            continue_path=$(eval echo "$HOME/continue")
+        else
+            continue_path=$(eval echo ~$(cat ssh_user)/continue)
+        fi
         time=${{ inputs.NGROK_TIMEOUT }}
 
         while [ ! -e $continue_path ] && [ $time -gt 1 ]
