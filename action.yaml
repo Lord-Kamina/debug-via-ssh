@@ -17,6 +17,10 @@ inputs:
   NGROK_TIMEOUT:
     description: 'Timeout in seconds for ngrok session'
     default: 21500
+  LOGIN_AS_RUNNER:
+    description: 'Login as runner instead of root'
+    default: true
+    required: true
 runs:
   using: "composite"
   steps:
